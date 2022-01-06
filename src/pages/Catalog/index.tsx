@@ -1,14 +1,17 @@
 import React from "react";
-import { View, Text } from "react-native";
-import {style} from "./style";
+import { Text } from "react-native";
+import { Header } from "../../components";
+import {Container} from "./style";
 
 export default function Catalog () {
 
 	return (
-		<View style={style.container}>
+		<Container >
+			<Header />
+
 			<Text>
 				tudo certo cara
 			</Text>
-		</View>
+		</Container>
 	);
 }
