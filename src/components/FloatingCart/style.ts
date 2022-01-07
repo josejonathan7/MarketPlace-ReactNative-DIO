@@ -23,7 +23,7 @@ export const CartTotalPrice = styled.Text`
 	font-family: ${FONTS.BOLD};
 `;
 
-export const CardButton = styled.TouchableOpacity`
+export const CartButton = styled.TouchableOpacity`
 	flex: 1;
 	flex-direction: row;
 	align-items: center;
@@ -31,7 +31,7 @@ export const CardButton = styled.TouchableOpacity`
 	padding: 20px;
 `;
 
-export const CardButtonText = styled.Text`
+export const CartButtonText = styled.Text`
 	flex: 1;
 	color: #F3F9FF;
 	font-family: ${FONTS.BOLD};

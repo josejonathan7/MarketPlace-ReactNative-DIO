@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Text, View } from "react-native";
-import { Header } from "../../components";
+import { View } from "react-native";
+import { Header, FloatingCart } from "../../components";
 import FeatherIcon from "react-native-vector-icons/Feather";
 import { Container, PriceContainer, Product, ProductButton, ProductButtonText, ProductContainer, ProductImage, ProductList, ProductTitle, ProductPrice } from "./style";
 import formateValue from "../../utils/formatValue";
@@ -17,13 +17,15 @@ interface RenderProps {
 }
 
 export default function Catalog () {
-	const [products, setProducts] = useState<Props[]>([{
-		id: "1",
-		title: "Assinatura Trimestral",
-		image_url: "https://tse2.mm.bing.net/th?id=OIP.NCQPi_Lml6qO9yBSLoyRGgHaEK&pid=Api&P=0&w=294&h=165",
-		price: 150
+	const [products, setProducts] = useState<Props[]>([
+		{
+			id: "1",
+			title: "Assinatura Trimestral",
+			image_url: "https://tse2.mm.bing.net/th?id=OIP.NCQPi_Lml6qO9yBSLoyRGgHaEK&pid=Api&P=0&w=294&h=165",
+			price: 150
 
-	}]);
+		}
+	]);
 
 	return (
 		<Container >
@@ -53,6 +55,7 @@ export default function Catalog () {
 					)}
 				/>
 			</ProductContainer>
+			<FloatingCart />
 		</Container>
 	);
 }
