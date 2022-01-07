@@ -40,18 +40,18 @@ export const ProductImage = styled.Image`
 	height: 92px;
 `;
 
-export const ProductTitleContainer = styled.Text`
+export const ProductTitleContainer = styled.View`
 	font-size: 16px;
 	font-family: ${FONTS.REGULAR};
 	margin: 10px 0 0 5px;
 `;
 
 export const ProductTitle = styled.Text`
-	font-size: 16px;
+	font-size: 14px;
 	font-family: ${FONTS.BOLD};
 `;
 
-export const ProductPriceContainer = styled.Text`
+export const ProductPriceContainer = styled.View`
 	flex-direction: column;
 `;
 
