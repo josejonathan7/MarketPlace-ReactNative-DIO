@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { View } from "react-native";
 import FeatherIcon from "react-native-vector-icons/Feather";
-import { Header } from "../../components";
+import { EmptyCart, Header } from "../../components";
 import { useNavigate } from "react-router-native";
 import { ActionButton, ActionContainer, Container, Product, ProductContainer, ProductImage, ProductList, ProductPrice, ProductPriceContainer, ProductQuantity, ProductSinglePrice, ProductTitle, ProductTitleContainer, SubTotalValue, TotalContainer, TotalProductsContainer, TotalProductsText } from "./styled";
 import formateValue from "../../utils/formatValue";
@@ -20,22 +20,7 @@ interface RenderProps {
 
 export default function Cart () {
 	const [ products, setProducts ] = useState<Props[]>([
-		{
-			id: "1",
-			title: "Assinatura Trimestral",
-			image_url: "https://tse2.mm.bing.net/th?id=OIP.NCQPi_Lml6qO9yBSLoyRGgHaEK&pid=Api&P=0&w=294&h=165",
-			quantity: 4,
-			price: 150
 
-		},
-		{
-			id: "2",
-			title: "Assinatura Trimestral",
-			image_url: "https://tse2.mm.bing.net/th?id=OIP.NCQPi_Lml6qO9yBSLoyRGgHaEK&pid=Api&P=0&w=294&h=165",
-			quantity: 2,
-			price: 70
-
-		}
 	]);
 	const navigate = useNavigate();
 
@@ -66,6 +51,7 @@ export default function Cart () {
 						data={products}
 						keyExtractor={(item: any) => item.id}
 						ListFooterComponent={<View/>}
+						ListEmptyComponent={<EmptyCart/>}
 						ListFooterComponentStyle={{
 							height: 80
 						}}
