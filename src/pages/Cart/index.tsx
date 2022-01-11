@@ -1,17 +1,16 @@
 import React, { useMemo, useState } from "react";
 import { View } from "react-native";
 import FeatherIcon from "react-native-vector-icons/Feather";
+import { useSelector, useDispatch } from "react-redux";
+import * as CartActions from "../../store/modules/cart/actions";
 import { EmptyCart, Header } from "../../components";
 import { useNavigate } from "react-router-native";
 import { ActionButton, ActionContainer, Container, Product, ProductContainer, ProductImage, ProductList, ProductPrice, ProductPriceContainer, ProductQuantity, ProductSinglePrice, ProductTitle, ProductTitleContainer, SubTotalValue, TotalContainer, TotalProductsContainer, TotalProductsText } from "./styled";
 import formateValue from "../../utils/formatValue";
+import { Product as ProductType} from "../../interfaces/product";
 
-interface Props {
+interface Props extends ProductType {
 	id: string;
-	title: string;
-	image_url: string;
-	price: number;
-	quantity: number;
 }
 
 interface RenderProps {
@@ -19,9 +18,9 @@ interface RenderProps {
 }
 
 export default function Cart () {
-	const [ products, setProducts ] = useState<Props[]>([
+	const dispatch = useDispatch();
+	const products = useSelector(({ cart }) => cart);
 
-	]);
 	const navigate = useNavigate();
 
 	const cartSize = useMemo(() => {
@@ -29,14 +28,28 @@ export default function Cart () {
 	}, [products]);
 
 	const cartTotal = useMemo(() => {
-		const cartAmount = products.reduce((acc, product) => {
-			const totalPrice = acc + (product.price * product.quantity);
+		const cartAmount = products.reduce((acc: number, product: Props) => {
+			const totalPrice = acc + (product.price * product.amount);
 			return totalPrice;
 		}, 0);
 
 		return formateValue(cartAmount);
 
 	}, [products]);
+
+	function increment(product: Props) {
+		dispatch(CartActions.updateAmountSuccess(product.id, product.amount+1));
+	}
+
+	function decrement(product: Props) {
+		dispatch(CartActions.updateAmountSuccess(product.id, product.amount-1));
+	}
+
+	function removeFromCart(id: string) {
+		dispatch(CartActions.removeFromCart(id));
+	}
+
+
 
 	return (
 		<>
@@ -49,6 +62,7 @@ export default function Cart () {
 				<ProductContainer>
 					<ProductList
 						data={products}
+						// eslint-disable-next-line @typescript-eslint/no-explicit-any
 						keyExtractor={(item: any) => item.id}
 						ListFooterComponent={<View/>}
 						ListEmptyComponent={<EmptyCart/>}
@@ -65,22 +79,22 @@ export default function Cart () {
 											{formateValue(item.price)}
 										</ProductSinglePrice>
 										<TotalContainer>
-											<ProductQuantity>{`${item.quantity}x`}</ProductQuantity>
+											<ProductQuantity>{`${item.amount}x`}</ProductQuantity>
 											<ProductPrice>
-												{formateValue(item.price * item.quantity)}
+												{formateValue(item.price * item.amount)}
 											</ProductPrice>
 										</TotalContainer>
 									</ProductPriceContainer>
 								</ProductTitleContainer>
 								<ActionContainer>
 									<ActionButton
-										onPress={() => {}}
+										onPress={() => increment(item)}
 									>
 										<FeatherIcon name="plus" color="#E83F5B" size={16} />
 
 									</ActionButton>
 									<ActionButton
-										onPress={() => {}}
+										onPress={() => item.amount > 1 ? decrement(item) : removeFromCart(item.id)}
 									>
 										<FeatherIcon name="minus" color="#E83F5B" size={16} />
 

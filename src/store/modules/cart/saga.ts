@@ -1,33 +1,27 @@
 import { all, takeLatest, select, call, put } from "redux-saga/effects";
 import api from "../../../services/api";
 import formateValue from "../../../utils/formatValue";
-import { addToCartSuccess } from "./actions";
+import { addToCartSuccess, updateAmountSuccess } from "./actions";
+import { Product } from "../../../interfaces/product";
 
-interface IteratorResult<T> {
-    done: boolean;
-    value: T;
+interface Props extends Product {
+	id: string
 }
 
-interface Iterator<T> {
-    next(value?: any): IteratorResult<T>;
-    return?(value?: any): IteratorResult<T>;
-    throw?(e?: any): IteratorResult<T>;
-}
-
-interface Iterable<T> {
-    [Symbol.iterator](): Iterator<T>;
-}
-
-interface IterableIterator<T> extends Iterator<T> {
-    [Symbol.iterator](): IterableIterator<T>;
+interface UpdateProps {
+	id: string;
+	amount: number
 }
 
 function* addToCart({id}) {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	const productExist = yield select(state => state.cart.find((product: { id: any; }) => product.id === id));
+	const productExist = yield select(state => state.cart.find((product: Props) => product.id === id));
+
+	const currentAmount = productExist ? productExist.amount : 0;
+	const amount = currentAmount + 1;
 
 	if(productExist){
-
+		yield put(updateAmountSuccess(id, amount));
 	}else {
 		const response = yield call(api.get, `products/${id}`);
 
@@ -41,4 +35,13 @@ function* addToCart({id}) {
 	}
 }
 
-export default all([takeLatest("@cart/ADD_REQUEST", addToCart)]);
+function* updateAmount({id, amount}: UpdateProps) {
+	if(amount <= 0) return;
+
+	yield put(updateAmountSuccess(id, amount));
+}
+
+export default all([
+	takeLatest("@cart/ADD_REQUEST", addToCart),
+	takeLatest("@cart/UPDATE_AMOUNT_SUCCESS", updateAmount)
+]);

@@ -7,21 +7,17 @@ import formateValue from "../../utils/formatValue";
 import api from "../../services/api";
 import * as CartActions from "../../store/modules/cart/actions";
 import { useDispatch } from "react-redux";
+import { Product as ProductProps} from "../../interfaces/product";
 
-interface Props {
+interface Props extends ProductProps {
 	id: string;
-	title: string;
-	image_url: string;
-	price: number;
 }
 
 interface RenderProps {
 	item : Props;
 }
 
-interface BackResponse extends Props {
-	quantity: number;
-}
+type BackResponse = Props
 
 export default function Catalog () {
 	const dispatch = useDispatch();
@@ -30,14 +26,8 @@ export default function Catalog () {
 	useEffect(() => {
 		async function loadProduct() {
 			console.log("c");
-			const data = await api.get("/products").then(res => res.data).catch(error => {
-				console.log(error);
-				return error.message;
-			});
-
-			console.log(data);
-
-			//setProducts(data);
+			const { data }= await api.get<BackResponse[]>("/products");
+			setProducts(data);
 		}
 
 		loadProduct();
